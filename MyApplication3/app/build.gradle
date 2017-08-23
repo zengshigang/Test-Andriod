@@ -1,4 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.7.9"//声明jacoco的版本号
+}
 
 android {
     compileSdkVersion 25
@@ -16,8 +21,22 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug{
+            testCoverageEnabled true
+            minifyEnabled false
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
     }
 }
+
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -25,5 +44,38 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'org.jacoco:org.jacoco.core:0.7.9'
     testCompile 'junit:junit:4.12'
+
+
+    def coverageSourceDirs = [
+            '../app/src/main/java'
+    ]
+//建立task任务将outputs/目录下coverage.ec文件的生成覆盖率报告
+    task jacocoTestReport(type: JacocoReport) {//,dependsOn:"connectedAndroidTest"
+        group = "Reporting"
+        description = "Generate Jacoco coverage reports after running tests."
+        reports {
+            xml.enabled = false
+            html.enabled = true
+            csv.enabled = false
+        }
+        classDirectories = fileTree(
+                dir: './build/intermediates/classes/debug',
+                excludes: ['**/R*.class',
+                           '**/*$InjectAdapter.class',
+                           '**/*$ModuleAdapter.class',
+                           '**/*$ViewInjector*.class'
+                ])
+        sourceDirectories = files(coverageSourceDirs)
+        executionData = files("$buildDir/outputs/coverage.ec")
+
+        doFirst {
+            new File("$buildDir/intermediates/classes/").eachFileRecurse { file ->
+                if (file.name.contains('$$')) {
+                    file.renameTo(file.path.replace('$$', '$'))
+                }
+            }
+        }
+    }
 }
