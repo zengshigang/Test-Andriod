@@ -29,6 +29,7 @@ android {
 
     lintOptions {
         abortOnError false
+        disable 'TypographyFractions','TypographyQuotes'
     }
     packagingOptions {
         exclude 'META-INF/NOTICE'
