@@ -35,6 +35,9 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
 
 
@@ -53,7 +56,7 @@ dependencies {
             '../app/src/main/java'
     ]
 //建立task任务将outputs/目录下coverage.ec文件的生成覆盖率报告
-    task jacocoTestReport(type: JacocoReport) {//,dependsOn:"connectedAndroidTest"
+    task jacocoTestReport(type: JacocoReport,dependsOn:"test") {//,dependsOn:"connectedAndroidTest"
         group = "Reporting"
         description = "Generate Jacoco coverage reports after running tests."
         reports {

@@ -3,7 +3,7 @@ package text.com.testandroid;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by wuqian on 2017/8/18.
