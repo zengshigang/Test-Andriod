@@ -19,7 +19,7 @@ public class CalculatorTest {
     @Test
     public void testSum() throws Exception {
         //expected: 6, sum of 1 and 5
-        assertEquals(6d, mCalculator.sum(1d, 5d), 0);
+        assertEquals(5d, mCalculator.sum(1d, 5d), 0);
     }
 
     @Test
